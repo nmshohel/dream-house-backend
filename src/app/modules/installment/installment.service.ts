@@ -13,7 +13,7 @@ const createInstallment = async (data: IInstallment): any => {
   let createdAmount=0;
   try {
     const lastInstallment = await Installment.findOne({}).sort({ createdAt: -1 });
-    let amount = 9000;
+    let amount = 7000;
    
     let nextMonth;
     let nextYear;
@@ -37,6 +37,7 @@ const createInstallment = async (data: IInstallment): any => {
         );
 
         amount -= remainingForLastMonth;
+        createdAmount=createdAmount+remainingForLastMonth
       }
     } else {
       // If there's no previous installment, set default values
@@ -56,7 +57,7 @@ const createInstallment = async (data: IInstallment): any => {
         throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create Installment!");
       }
       // counter valriable
-      createdAmount=createdAmount!+parseInt(createdInstallment.amount)
+      createdAmount=createdAmount+parseInt(createdInstallment.amount)
       amount -= 3000;
 
       // Update nextMonth and nextYear for the next iteration
