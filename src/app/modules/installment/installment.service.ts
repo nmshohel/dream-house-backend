@@ -10,31 +10,28 @@ import { IInstallment, IInstallmentFilters } from "./installment.interface";
 import { Installment } from "./installment.model";
 
 
-const createInstallment = async (data: IInstallment) => {
+const createInstallment = async (data: IInstallment): any => {
   try {
     const lastInstallment = await Installment.findOne({}).sort({ createdAt: -1 });
-    let amount = 5000;
+    let amount = 15000;
 
     let nextMonth;
     let nextYear;
 
-    if (lastInstallment) {
-      // Convert the month to a number
-      const lastMonth: number = parseInt(lastInstallment.month, 10);
-      const lastYear = parseInt(lastInstallment.year);
+    for (let i = 0; i < amount; i += 3000) {
+      if (lastInstallment) {
+        // Convert the month to a number
+        const lastMonth: number = parseInt(lastInstallment.month, 10);
+        const lastYear: number = parseInt(lastInstallment.year, 10);
 
-      // Increment the month, and handle the case where it goes beyond 12
-      nextMonth = (lastMonth % 12) + 1;
-      nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
-    } else {
-      // If there's no previous installment, set default values
-      nextMonth = 1;
-      nextYear = new Date().getFullYear();
-    }
-
-    let i: number;
-    for (i = 0; i <= amount; i++) {
-      // in loop for create installment 
+        // Increment the month and handle the case where it goes beyond 12
+        nextMonth = (lastMonth % 12) + 1;
+        nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
+      } else {
+        // If there's no previous installment, set default values
+        nextMonth = 1;
+        nextYear = new Date().getFullYear();
+      }
 
       const createdInstallment = await Installment.create({
         month: nextMonth,
@@ -47,19 +44,26 @@ const createInstallment = async (data: IInstallment) => {
         throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create Installment!");
       }
 
-      // Update nextMonth for the next iteration
-      nextMonth = (nextMonth % 12) + 1;
-
       amount -= 3000;
+
+      // Update nextMonth and nextYear for the next iteration
+      if (lastInstallment) {
+        lastInstallment.month = nextMonth.toString(); // Ensure it's a string
+        lastInstallment.year = nextYear.toString();   // Ensure it's a string
+      }
     }
-    
-    return { message: "amount created" };
+
   } catch (error) {
     // Handle the error appropriately (e.g., log it, throw a custom error, etc.)
     console.error("Error creating installment:", error);
     throw error; // Re-throw the error for the calling code to handle
   }
+
+  return {
+    "message": "created"
+  };
 };
+
 
 
 
