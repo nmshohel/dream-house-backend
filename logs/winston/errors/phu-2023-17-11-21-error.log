@@ -1,0 +1,6 @@
+Fri Nov 17 2023 21:25:28 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmshohel@gmail.com" }
+Fri Nov 17 2023 21:25:55 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmshohel@gmail.com" }
+Fri Nov 17 2023 21:29:22 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmshohel@gmail.com" }
+Fri Nov 17 2023 21:29:46 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmshohel@gmail.com" }
+Fri Nov 17 2023 21:58:40 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: amount: Path `amount` is required.
+Fri Nov 17 2023 21:59:11 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmshokhel@gmail.com" }

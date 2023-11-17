@@ -5,37 +5,38 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { UserFilterableFields } from './user.constrant';
-import { IUser } from './user.interface';
-import { UserService } from './user.service';
+import { InstallmentFilterableFields } from './installment.constrant';
+import { IInstallment } from './installment.interface';
+import { InstallmentService } from './installment.service';
 
-const createUser: RequestHandler = catchAsync(
+
+const createInstallment: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const userData = req.body;
-    const result = await UserService.createUser(userData);
+    const result = await InstallmentService.createInstallment(userData);
 
-    sendResponse<IUser>(res, {
+    sendResponse<IInstallment>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'User created successfully!',
+      message: 'Installment created successfully!',
       data: result,
     });
   }
 );
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-    const filters = pick(req.query, UserFilterableFields);
+    const filters = pick(req.query, InstallmentFilterableFields);
     const paginationOptions = pick(req.query, paginationFields);
   
-    const result = await UserService.getAllFromDB(
+    const result = await InstallmentService.getAllFromDB(
       filters,
       paginationOptions
     );
   
-    sendResponse<IUser[]>(res, {
+    sendResponse<IInstallment[]>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'User fetched successfully !',
+      message: 'Installment fetched successfully !',
       meta: result.meta,
       data: result.data,
     });
@@ -43,12 +44,12 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const getById = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
   
-    const result = await UserService.getById(id);
+    const result = await InstallmentService.getById(id);
   
-    sendResponse<IUser>(res, {
+    sendResponse<IInstallment>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'User fetched successfully !',
+      message: 'Installment fetched successfully !',
       data: result,
     });
   });
@@ -56,12 +57,12 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
     const updatedData = req.body;
   
-    const result = await UserService.updateIntoDB(id, updatedData);
+    const result = await InstallmentService.updateIntoDB(id, updatedData);
   
-    sendResponse<IUser>(res, {
+    sendResponse<IInstallment>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'User updated successfully !',
+      message: 'Installment updated successfully !',
       data: result,
     });
   });
@@ -70,17 +71,17 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
   
-    const result = await UserService.deleteFromDB(id);
+    const result = await InstallmentService.deleteFromDB(id);
   
-    sendResponse<IUser>(res, {
+    sendResponse<IInstallment>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'User deleted successfully !',
+      message: 'Installment deleted successfully !',
       data: result,
     });
   });
-export const UserController = {
-  createUser,
+export const InstallmentController = {
+  createInstallment,
   getAllFromDB,
   getById,
   updateIntoDB,

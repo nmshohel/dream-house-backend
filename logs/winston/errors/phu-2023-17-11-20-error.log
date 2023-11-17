@@ -1,1 +1,2 @@
 Fri Nov 17 2023 20:6:43 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User validation failed: password: Path `password` is required.
+Fri Nov 17 2023 20:28:0 } [PH] error: Failed to connect database querySrv ETIMEOUT _mongodb._tcp.cluster0.lszl0.mongodb.net

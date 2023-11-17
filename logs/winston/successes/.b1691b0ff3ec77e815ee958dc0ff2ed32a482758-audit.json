@@ -19,6 +19,16 @@
             "date": 1700229999614,
             "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-17-11-20-success.log",
             "hash": "71d9d43fe015b54924d12c4e47d38d872bface8151febebb405172748c20c63d"
+        },
+        {
+            "date": 1700233351406,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-17-11-21-success.log",
+            "hash": "6519927889ffa96e8a3cbbad6710e22ee2dfc776ce0ae4fbbd1f025d258a9291"
+        },
+        {
+            "date": 1700236857453,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-17-11-22-success.log",
+            "hash": "d6d6f12f986e6ad8cc58d88c483dfe57d04ea4b634445e7d0b10329041fcd1dd"
         }
     ],
     "hashType": "sha256"
