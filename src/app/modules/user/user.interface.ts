@@ -3,11 +3,10 @@ import { Model } from 'mongoose';
 
 
 export type IUser = {
-  id: string;
   role: string;
   password: string;
   name:string;
-  email:string
+  userName:string
 };
 
 export type UserModel = {

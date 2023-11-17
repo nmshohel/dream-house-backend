@@ -12,14 +12,14 @@ import { Installment } from "./installment.model";
 
 const createInstallment = async (data: IInstallment): Promise<any> => {
   
-  const isUserExist=await User.findOne({email:data.email})
+  const isUserExist=await User.findOne({userName:data.userName})
 if(!isUserExist)
 {
   throw new ApiError(httpStatus.NOT_FOUND, "User Not Found")
 }
   let createdAmount=0;
   try {
-    const lastInstallment = await Installment.findOne({email:data?.email}).sort({ createdAt: -1 });
+    const lastInstallment = await Installment.findOne({userName:data?.userName}).sort({ createdAt: -1 });
     let amount:number = parseInt(data?.amount);
    
     let nextMonth;
@@ -56,7 +56,7 @@ if(!isUserExist)
       const createdInstallment = await Installment.create({
         month: nextMonth,
         year: nextYear,
-        email: data.email,
+        email: data.userName,
         amount: Math.min(amount, 3000), // Ensure the installment amount is at most 3000
       });
 
@@ -82,7 +82,7 @@ if(!isUserExist)
   }
 
   return {
-    "message":`Amount ${createdAmount} added for ${data.email}`
+    "message":`Amount ${createdAmount} added for ${data.userName}`
   };
 };
 
@@ -118,7 +118,7 @@ const getAllFromDB = async (
     }
   
     // Dynamic  Sort needs  field to  do sorting
-    const sortConditions: { [key: string]: SortOrder } = {};
+    const sortConditions: { [key: string]: SortOrder } = {createdAt: -1,};
     if (sortBy && sortOrder) {
       sortConditions[sortBy] = sortOrder;
     }

@@ -14,7 +14,7 @@ router.get(
   );
 
   router.get(
-    '/:id',InstallmentController.getById
+    '/:email',InstallmentController.getById
   );
   router.patch(
     '/:id',InstallmentController.updateIntoDB

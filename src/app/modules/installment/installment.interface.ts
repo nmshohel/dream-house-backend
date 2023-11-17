@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 
 
 export type IInstallment = {
-  email: string;
+  userName: string;
   month: string;
   year: string;
   amount:string;

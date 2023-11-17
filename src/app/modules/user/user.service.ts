@@ -1,7 +1,6 @@
 
 import httpStatus from "http-status";
 import { SortOrder } from "mongoose";
-import config from "../../../config";
 import ApiError from "../../../errors/ApiError";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { IGenericResponse } from "../../../interfaces/common";
@@ -9,17 +8,14 @@ import { IPaginationOptions } from "../../../interfaces/pagination";
 import { UserSearchableFields } from "./user.constrant";
 import { IUser, IUserFilters } from "./user.interface";
 import { User } from "./user.model";
-import { generateUserId } from "./user.utils";
 
 const createUser=async(user:IUser):Promise<IUser|null>=>{
 
-    const id=await generateUserId()
-    // auto generate id 
-    user.id=id
-    if(!user.password)
-    {
-        user.password=config.default_user_pass as string
-    }
+  const isUserExist=await User.findOne({userName:user.userName})
+  if(isUserExist)
+  {
+    throw new ApiError(httpStatus.NOT_FOUND, "User already Exists")
+  }
     const createdUser=await User.create(user)
     if(!createdUser)
     {

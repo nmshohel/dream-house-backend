@@ -25,3 +25,20 @@ Sat Nov 18 2023 0:30:36 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
   }
 ]
 Sat Nov 18 2023 0:30:49 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User Not Found
+Sat Nov 18 2023 0:44:11 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "userName"
+    ],
+    "message": "email is required"
+  }
+]
+Sat Nov 18 2023 0:50:6 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User already Exists
+Sat Nov 18 2023 0:50:21 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User already Exists
+Sat Nov 18 2023 0:50:49 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User already Exists
+Sat Nov 18 2023 0:50:57 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User already Exists
+Sat Nov 18 2023 0:51:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User validation failed: name: Path `name` is required.
