@@ -7,7 +7,6 @@ const UserSchema = new Schema<IUser, UserModel>(
     id: {
       type: String,
       required: true,
-      unique: true,
     },
     name:{
         type:String,

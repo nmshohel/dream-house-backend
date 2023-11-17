@@ -15,7 +15,7 @@ const createInstallment: RequestHandler = catchAsync(
     const userData = req.body;
     const result = await InstallmentService.createInstallment(userData);
 
-    sendResponse<IInstallment>(res, {
+    sendResponse<any>(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Installment created successfully!',

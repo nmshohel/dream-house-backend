@@ -10,9 +10,10 @@ import { IInstallment, IInstallmentFilters } from "./installment.interface";
 import { Installment } from "./installment.model";
 
 
-const createInstallment = async (data: IInstallment): Promise<IInstallment | null> => {
+const createInstallment = async (data: IInstallment) => {
   try {
     const lastInstallment = await Installment.findOne({}).sort({ createdAt: -1 });
+    let amount = 5000;
 
     let nextMonth;
     let nextYear;
@@ -20,7 +21,7 @@ const createInstallment = async (data: IInstallment): Promise<IInstallment | nul
     if (lastInstallment) {
       // Convert the month to a number
       const lastMonth: number = parseInt(lastInstallment.month, 10);
-      const lastYear = lastInstallment.year;
+      const lastYear = parseInt(lastInstallment.year);
 
       // Increment the month, and handle the case where it goes beyond 12
       nextMonth = (lastMonth % 12) + 1;
@@ -31,24 +32,35 @@ const createInstallment = async (data: IInstallment): Promise<IInstallment | nul
       nextYear = new Date().getFullYear();
     }
 
-    const createdInstallment = await Installment.create({
-      month: nextMonth,
-      year: nextYear,
-      email: data.email,
-      amount: 3000,
-    });
+    let i: number;
+    for (i = 0; i <= amount; i++) {
+      // in loop for create installment 
 
-    if (!createdInstallment) {
-      throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create Installment!");
+      const createdInstallment = await Installment.create({
+        month: nextMonth,
+        year: nextYear,
+        email: data.email,
+        amount: 3000,
+      });
+
+      if (!createdInstallment) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create Installment!");
+      }
+
+      // Update nextMonth for the next iteration
+      nextMonth = (nextMonth % 12) + 1;
+
+      amount -= 3000;
     }
-
-    return createdInstallment;
+    
+    return { message: "amount created" };
   } catch (error) {
     // Handle the error appropriately (e.g., log it, throw a custom error, etc.)
     console.error("Error creating installment:", error);
     throw error; // Re-throw the error for the calling code to handle
   }
 };
+
 
 
 const getAllFromDB = async (

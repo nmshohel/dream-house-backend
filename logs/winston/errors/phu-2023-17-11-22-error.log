@@ -1,3 +1,8 @@
 Fri Nov 17 2023 22:1:9 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ createdInstallment is not defined
 Fri Nov 17 2023 22:4:19 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ createdInstallment is not defined
 Fri Nov 17 2023 22:19:26 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmshofgkhel@gmail.com" }
+Fri Nov 17 2023 22:22:38 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmsdfdfddfvdddfdffdfddfdddfdfdfsdddfdfdfddfffdddfhofgkhel@gmail.com" }
+Fri Nov 17 2023 22:24:22 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmsdfdfdddfhofgkhel@gmail.com" }
+Fri Nov 17 2023 22:27:24 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmsdfdfdfdddddfddhdddosdfddgkhedl@gmail.com" }
+Fri Nov 17 2023 22:30:26 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmsdfdfdfdddddfdddhdddosdfddgkhedl@gmail.com" }
+Fri Nov 17 2023 22:35:5 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ E11000 duplicate key error collection: dream-house.installments index: email_1 dup key: { email: "nmsdfdfdfdddddfdddhdsssssddosdfddgkhedl@gmail.com" }
