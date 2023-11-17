@@ -5,14 +5,21 @@ import ApiError from "../../../errors/ApiError";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
+import { User } from "../user/user.model";
 import { InstallmentSearchableFields } from "./installment.constrant";
 import { IInstallment, IInstallmentFilters } from "./installment.interface";
 import { Installment } from "./installment.model";
 
-const createInstallment = async (data: IInstallment): any => {
+const createInstallment = async (data: IInstallment): Promise<any> => {
+  
+  const isUserExist=await User.findOne({email:data.email})
+if(!isUserExist)
+{
+  throw new ApiError(httpStatus.NOT_FOUND, "User Not Found")
+}
   let createdAmount=0;
   try {
-    const lastInstallment = await Installment.findOne({}).sort({ createdAt: -1 });
+    const lastInstallment = await Installment.findOne({email:data?.email}).sort({ createdAt: -1 });
     let amount:number = parseInt(data?.amount);
    
     let nextMonth;

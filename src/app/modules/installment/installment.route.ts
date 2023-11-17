@@ -1,9 +1,13 @@
 import express from 'express';
+import validateRequest from '../../middlewares/validateRequest';
 import { InstallmentController } from './installment.controller';
+import { InstallmentValidation } from './installment.validation';
 const router = express.Router();
 
 router.post(
-  '/create-installment',InstallmentController.createInstallment
+  '/create-installment',
+  validateRequest(InstallmentValidation.create),
+  InstallmentController.createInstallment
 );
 router.get(
     '/',InstallmentController.getAllFromDB

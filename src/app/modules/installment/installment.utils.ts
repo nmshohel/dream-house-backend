@@ -1,4 +1,5 @@
-import { User } from "./installment.model"
+import { User } from "../user/user.model"
+
 
 
 

@@ -1,1 +1,27 @@
 Sat Nov 18 2023 0:9:22 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: email: Path `email` is required.
+Sat Nov 18 2023 0:21:0 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User Not Found
+Sat Nov 18 2023 0:30:27 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "amount"
+    ],
+    "message": "amount is required"
+  }
+]
+Sat Nov 18 2023 0:30:36 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "email"
+    ],
+    "message": "email is required"
+  }
+]
+Sat Nov 18 2023 0:30:49 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User Not Found
