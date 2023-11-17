@@ -1,0 +1,25 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\.b1691b0ff3ec77e815ee958dc0ff2ed32a482758-audit.json",
+    "files": [
+        {
+            "date": 1700222429872,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-17-11-18-success.log",
+            "hash": "2c8d9fa1bd7da533d6b958561960d76fd5e6497b17497cf6be2612e6f603a5c1"
+        },
+        {
+            "date": 1700229367343,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-17-11-19-success.log",
+            "hash": "d159831446504ecff15f9c83594e6182c0ef47e264ee5f0fcb18f783c77d30bd"
+        },
+        {
+            "date": 1700229999614,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-17-11-20-success.log",
+            "hash": "71d9d43fe015b54924d12c4e47d38d872bface8151febebb405172748c20c63d"
+        }
+    ],
+    "hashType": "sha256"
+}
