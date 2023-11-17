@@ -13,7 +13,7 @@ const createInstallment = async (data: IInstallment): any => {
   let createdAmount=0;
   try {
     const lastInstallment = await Installment.findOne({}).sort({ createdAt: -1 });
-    let amount = 7000;
+    let amount:number = parseInt(data?.amount);
    
     let nextMonth;
     let nextYear;
@@ -75,7 +75,7 @@ const createInstallment = async (data: IInstallment): any => {
   }
 
   return {
-    createdAmount
+    "message":`Amount ${createdAmount} added for ${data.email}`
   };
 };
 
