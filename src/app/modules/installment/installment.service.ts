@@ -9,47 +9,61 @@ import { InstallmentSearchableFields } from "./installment.constrant";
 import { IInstallment, IInstallmentFilters } from "./installment.interface";
 import { Installment } from "./installment.model";
 
-
 const createInstallment = async (data: IInstallment): any => {
+  let createdAmount=0;
   try {
     const lastInstallment = await Installment.findOne({}).sort({ createdAt: -1 });
-    let amount = 15000;
-
+    let amount = 9000;
+   
     let nextMonth;
     let nextYear;
 
-    for (let i = 0; i < amount; i += 3000) {
-      if (lastInstallment) {
-        // Convert the month to a number
-        const lastMonth: number = parseInt(lastInstallment.month, 10);
-        const lastYear: number = parseInt(lastInstallment.year, 10);
+    if (lastInstallment) {
+      // Convert the month to a number
+      const lastMonth: number = parseInt(lastInstallment.month, 10);
+      const lastYear: number = parseInt(lastInstallment.year, 10);
 
-        // Increment the month and handle the case where it goes beyond 12
-        nextMonth = (lastMonth % 12) + 1;
-        nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
-      } else {
-        // If there's no previous installment, set default values
-        nextMonth = 1;
-        nextYear = new Date().getFullYear();
+      // Increment the month and handle the case where it goes beyond 12
+      nextMonth = (lastMonth % 12) + 1;
+      nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
+
+      // Check if the last installment amount is less than 3000
+      if (Number(lastInstallment.amount) < 3000) {
+        // Fill up the remaining amount for the last month
+        const remainingForLastMonth = 3000 - Number(lastInstallment.amount);
+        await Installment.updateOne(
+          { _id: lastInstallment._id },
+          { $set: { amount: 3000 } }
+        );
+
+        amount -= remainingForLastMonth;
       }
+    } else {
+      // If there's no previous installment, set default values
+      nextMonth = 1;
+      nextYear = new Date().getFullYear();
+    }
 
+    while (amount > 0) {
       const createdInstallment = await Installment.create({
         month: nextMonth,
         year: nextYear,
         email: data.email,
-        amount: 3000,
+        amount: Math.min(amount, 3000), // Ensure the installment amount is at most 3000
       });
 
       if (!createdInstallment) {
         throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create Installment!");
       }
-
+      // counter valriable
+      createdAmount=createdAmount!+parseInt(createdInstallment.amount)
       amount -= 3000;
 
       // Update nextMonth and nextYear for the next iteration
-      if (lastInstallment) {
-        lastInstallment.month = nextMonth.toString(); // Ensure it's a string
-        lastInstallment.year = nextYear.toString();   // Ensure it's a string
+      nextMonth += 1;
+      if (nextMonth > 12) {
+        nextMonth = 1;
+        nextYear += 1;
       }
     }
 
@@ -60,11 +74,9 @@ const createInstallment = async (data: IInstallment): any => {
   }
 
   return {
-    "message": "created"
+    createdAmount
   };
 };
-
-
 
 
 const getAllFromDB = async (
