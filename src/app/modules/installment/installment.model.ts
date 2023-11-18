@@ -11,11 +11,11 @@ const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
     },
     month:{
         type:String,
-        required:true,
+       
     },
     year:{
         type:String,
-        required:true
+      
     },
     installmentType:{
       type:String,

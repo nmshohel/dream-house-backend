@@ -4,8 +4,8 @@ import { Model } from 'mongoose';
 
 export type IInstallment = {
   userName: string;
-  month: string;
-  year: string;
+  month?: string;
+  year?: string;
   installmentType:'monthly' | 'one time';
   amount:string;
 };
@@ -20,3 +20,5 @@ export type IInstallmentFilters = {
     year?: string;
 
   };
+
+export type IInstallmentType=['monthly' | 'one time']

@@ -12,14 +12,28 @@ import { Installment } from "./installment.model";
 
 const createInstallment = async (data: IInstallment): Promise<any> => {
   
-  const isUserExist=await User.findOne({userName:data.userName})
+const isUserExist=await User.findOne({userName:data.userName})
 if(!isUserExist)
 {
   throw new ApiError(httpStatus.NOT_FOUND, "User Not Found")
 }
+
+// check one time Installment 
+if(data.installmentType==="one time")
+{
+  const createdOTInstallment = await Installment.create({
+    userName: data.userName,
+    installmentType:data.installmentType,
+    amount: data.amount, // Ensure the installment amount is at most 3000
+  });
+
+  return createdOTInstallment
+
+}
+
   let createdAmount=0;
   try {
-    const lastInstallment = await Installment.findOne({userName:data?.userName}).sort({ createdAt: -1 });
+    const lastInstallment = await Installment.findOne({userName:data?.userName,installmentType:"monthly"}).sort({ createdAt: -1 });
     let amount:number = parseInt(data?.amount);
    
     let nextMonth;
@@ -27,8 +41,8 @@ if(!isUserExist)
 
     if (lastInstallment) {
       // Convert the month to a number
-      const lastMonth: number = parseInt(lastInstallment.month, 10);
-      const lastYear: number = parseInt(lastInstallment.year, 10);
+      const lastMonth: number = parseInt(lastInstallment.month!, 10);
+      const lastYear: number = parseInt(lastInstallment.year!, 10);
 
       // Increment the month and handle the case where it goes beyond 12
       nextMonth = (lastMonth % 12) + 1;
