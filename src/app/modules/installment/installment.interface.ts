@@ -8,6 +8,7 @@ export type IInstallment = {
   year?: string;
   installmentType:'monthly' | 'one time';
   amount:string;
+  status:string;
 };
 
 export type InstallmentModel = {

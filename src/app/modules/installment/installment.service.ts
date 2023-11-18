@@ -25,6 +25,7 @@ if(data.installmentType==="one time")
     userName: data.userName,
     installmentType:data.installmentType,
     amount: data.amount, // Ensure the installment amount is at most 3000
+    status:"pending"
   });
 
   return createdOTInstallment
@@ -73,6 +74,7 @@ if(data.installmentType==="one time")
         userName: data.userName,
         installmentType:data.installmentType,
         amount: Math.min(amount, 3000), // Ensure the installment amount is at most 3000
+        status:"pending"
       });
 
       if (!createdInstallment) {

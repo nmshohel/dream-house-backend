@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
-import { installmentType } from './installment.constrant';
+import { installmentType, status } from './installment.constrant';
 import { IInstallment, InstallmentModel } from './installment.interface';
 
 const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
@@ -25,6 +25,10 @@ const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
     amount: {
       type: String,
       required: true,
+    },
+    status: {
+      type: String,
+      enum:status
     },
 
   },

@@ -14,3 +14,4 @@ export const InstallmentSearchableFields = [
   ];
 
   export const installmentType = ['monthly', 'one time'];
+  export const status = ['pending', 'approved'];
