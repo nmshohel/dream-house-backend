@@ -158,7 +158,66 @@ const getAllFromDB = async (
       data: result,
     };
   };
-const getByUser = async (
+
+  const getAllFromDBByStatusPending = async (
+    filters: IInstallmentFilters,
+    paginationOptions: IPaginationOptions
+  ): Promise<IGenericResponse<IInstallment[]>> => {
+    // Extract searchTerm to implement search query
+    const { searchTerm, ...filtersData } = filters;
+    const { page, limit, skip, sortBy, sortOrder } =
+      paginationHelpers.calculatePagination(paginationOptions);
+  
+    const andConditions = [];
+    // Search needs $or for searching in specified fields
+    if (searchTerm) {
+      andConditions.push({
+        $or: InstallmentSearchableFields.map(field => ({
+          [field]: {
+            $regex: searchTerm,
+            $options: 'i',
+          },
+        })),
+      });
+    }
+    // Filters needs $and to fullfill all the conditions
+    if (Object.keys(filtersData).length) {
+      andConditions.push({
+        $and: Object.entries(filtersData).map(([field, value]) => ({
+          [field]: value,
+        })),
+      });
+    }
+  
+    // Dynamic  Sort needs  field to  do sorting
+    const sortConditions: { [key: string]: SortOrder } = {createdAt: -1,};
+    if (sortBy && sortOrder) {
+      sortConditions[sortBy] = sortOrder;
+    }
+    const whereConditions =
+      andConditions.length > 0 ? { $and: andConditions } : {};
+  
+    const result = await Installment.find({
+      ...whereConditions,
+      status:"pending"
+    })
+      .sort(sortConditions)
+      .skip(skip)
+      .limit(limit);
+  
+    const total = await Installment.countDocuments(whereConditions);
+  
+    return {
+      meta: {
+        page,
+        limit,
+        total,
+      },
+      data: result,
+    };
+  };
+
+  const getByUser = async (
     filters: IInstallmentFilters,
     paginationOptions: IPaginationOptions,
     userName:string
@@ -268,5 +327,6 @@ export const InstallmentService={
     getByUser,
     updateIntoDB,
     deleteFromDB,
-    getById
+    getById,
+    getAllFromDBByStatusPending
 }

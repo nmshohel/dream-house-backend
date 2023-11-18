@@ -13,6 +13,9 @@ router.get(
     '/',InstallmentController.getAllFromDB
   );
   router.get(
+    '/pending',InstallmentController.getAllFromDBByStatusPending
+  );
+  router.get(
     '/:id',InstallmentController.getById
   );
 

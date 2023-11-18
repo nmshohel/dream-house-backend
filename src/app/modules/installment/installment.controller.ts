@@ -41,6 +41,24 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
       data: result.data,
     });
   });
+
+  const getAllFromDBByStatusPending = catchAsync(async (req: Request, res: Response) => {
+    const filters = pick(req.query, InstallmentFilterableFields);
+    const paginationOptions = pick(req.query, paginationFields);
+  
+    const result = await InstallmentService.getAllFromDBByStatusPending(
+      filters,
+      paginationOptions
+    );
+  
+    sendResponse<IInstallment[]>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Installment fetched successfully !',
+      meta: result.meta,
+      data: result.data,
+    });
+  });
 const getByUser = catchAsync(async (req: Request, res: Response) => {
     const filters = pick(req.query, InstallmentFilterableFields);
     const paginationOptions = pick(req.query, paginationFields);
@@ -105,5 +123,6 @@ export const InstallmentController = {
   getByUser,
   updateIntoDB,
   deleteFromDB,
-  getById
+  getById,
+  getAllFromDBByStatusPending
 };
