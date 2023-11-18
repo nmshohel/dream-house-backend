@@ -1,0 +1,22 @@
+Sat Nov 18 2023 17:34:55 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "installmentType"
+    ],
+    "message": "installment Type is required"
+  }
+]
+Sat Nov 18 2023 17:35:49 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ User Not Found
+Sat Nov 18 2023 17:36:6 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:36:27 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:36:43 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:37:27 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:38:40 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:49:0 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:49:2 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:50:13 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.
+Sat Nov 18 2023 17:50:34 } [PH] error: 🐱‍🏍 globalErrorHandler ~~ Installment validation failed: installmentType: Path `installmentType` is required., userName: Path `userName` is required.

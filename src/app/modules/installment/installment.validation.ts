@@ -8,6 +8,9 @@ const create = z.object({
     amount: z.string({
         required_error:"amount is required"
     }),
+    installmentType: z.string({
+        required_error:"installment Type is required"
+    }),
 
 
   }),

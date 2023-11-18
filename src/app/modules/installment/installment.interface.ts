@@ -6,6 +6,7 @@ export type IInstallment = {
   userName: string;
   month: string;
   year: string;
+  installmentType:'monthly' | 'one time';
   amount:string;
 };
 

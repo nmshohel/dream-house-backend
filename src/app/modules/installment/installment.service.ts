@@ -56,7 +56,8 @@ if(!isUserExist)
       const createdInstallment = await Installment.create({
         month: nextMonth,
         year: nextYear,
-        email: data.userName,
+        userName: data.userName,
+        installmentType:data.installmentType,
         amount: Math.min(amount, 3000), // Ensure the installment amount is at most 3000
       });
 
@@ -141,22 +142,80 @@ const getAllFromDB = async (
       data: result,
     };
   };
+const getByUser = async (
+    filters: IInstallmentFilters,
+    paginationOptions: IPaginationOptions,
+    userName:string
+  ): Promise<IGenericResponse<IInstallment[]>> => {
+    // Extract searchTerm to implement search query
+    const { searchTerm, ...filtersData } = filters;
+    const { page, limit, skip, sortBy, sortOrder } =
+      paginationHelpers.calculatePagination(paginationOptions);
+  
+    const andConditions = [];
+    // Search needs $or for searching in specified fields
+    if (searchTerm) {
+      andConditions.push({
+        $or: InstallmentSearchableFields.map(field => ({
+          [field]: {
+            $regex: searchTerm,
+            $options: 'i',
+          },
+        })),
+      });
+    }
+    // Filters needs $and to fullfill all the conditions
+    if (Object.keys(filtersData).length) {
+      andConditions.push({
+        $and: Object.entries(filtersData).map(([field, value]) => ({
+          [field]: value,
+        })),
+      });
+    }
+  
+    // Dynamic  Sort needs  field to  do sorting
+    const sortConditions: { [key: string]: SortOrder } = {createdAt: -1,};
+    if (sortBy && sortOrder) {
+      sortConditions[sortBy] = sortOrder;
+    }
+    const whereConditions =
+      andConditions.length > 0 ? { $and: andConditions } : {};
+  
+    const result = await Installment.find({
+      ...whereConditions,
+      userName:userName
+    })
+      .sort(sortConditions)
+      .skip(skip)
+      .limit(limit);
+  
+    const total = await Installment.countDocuments(whereConditions);
+  
+    return {
+      meta: {
+        page,
+        limit,
+        total,
+      },
+      data: result,
+    };
+  };
 
 const getById = async (id: string): Promise<IInstallment | null> => {
-    const result = await Installment.findOne({ id })
+    const result = await Installment.findById(id);
     return result;
   };
 const updateIntoDB = async (
     id: string,
     payload: Partial<IInstallment>
   ): Promise<IInstallment | null> => {
-    const isExist = await Installment.findOne({ id });
+    const isExist = await Installment.findById(id);
   
     if (!isExist) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Installment not found !');
     }
   
-    const result = await Installment.findOneAndUpdate({ id }, payload, {
+    const result = await Installment.findOneAndUpdate({ _id:id }, payload, {
       new: true,
     });
     return result;
@@ -164,26 +223,25 @@ const updateIntoDB = async (
 
 const deleteFromDB = async (id: string): Promise<IInstallment | null> => {
     // Find the user by ID
-    const installmentToDelete = await Installment.findOne({ id });
+    const isExist = await Installment.findById(id);
   
-    // Check if the user exists
-    if (!installmentToDelete) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Installment not found!');
+    if (!isExist) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Installment not found !');
     }
   
     // Store user details before deletion
-    const deletedUser = { ...installmentToDelete.toObject() };
+    const deleteInstallment = { ...isExist.toObject() };
   
     // Delete the user
-    const deleteResult = await Installment.deleteOne({ id });
+    const deleteinstallment = await Installment.deleteOne({ _id:id });
   
     // Check if the deletion was successful
-    if (deleteResult.deletedCount === 0) {
+    if (deleteinstallment.deletedCount === 0) {
       throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to delete installment!');
     }
   
     // Return the deleted user details
-    return deletedUser;
+    return deleteInstallment;
   };
   
 
@@ -191,7 +249,8 @@ const deleteFromDB = async (id: string): Promise<IInstallment | null> => {
 export const InstallmentService={
   createInstallment,
     getAllFromDB,
-    getById,
+    getByUser,
     updateIntoDB,
-    deleteFromDB
+    deleteFromDB,
+    getById
 }

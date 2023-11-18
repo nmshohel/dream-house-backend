@@ -39,6 +39,26 @@
             "date": 1700244001533,
             "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-18-11-00-success.log",
             "hash": "3fdc3af69ffcc9e511228a89ed75727a150b2345a3fb5a07ba10b7a00a3ca5ca"
+        },
+        {
+            "date": 1700247828048,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-18-11-01-success.log",
+            "hash": "66b8f7c2f01f384eed078d978002fa0733646b700342f6c920cd3fceb95297bb"
+        },
+        {
+            "date": 1700294530436,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-18-11-14-success.log",
+            "hash": "7fee0ff7805edeb55d3805b6d61c53b66cca993f26f790a03f47e72afe94a603"
+        },
+        {
+            "date": 1700307178280,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-18-11-17-success.log",
+            "hash": "fc5ac6327d1952105c03e7fcf481e16882d24e00000fa8ec52c91a23b3db87a0"
+        },
+        {
+            "date": 1700308803041,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-18-11-18-success.log",
+            "hash": "3816d1fa40612937be146282eb099f886bf8d9f8cd5eecbe3fba9887fe3ddef1"
         }
     ],
     "hashType": "sha256"

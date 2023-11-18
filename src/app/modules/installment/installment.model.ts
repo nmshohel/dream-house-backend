@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
+import { installmentType } from './installment.constrant';
 import { IInstallment, InstallmentModel } from './installment.interface';
 
 const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
   {
-    email: {
+    userName: {
       type: String,
       required: true,
     },
@@ -16,6 +17,11 @@ const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
         type:String,
         required:true
     },
+    installmentType:{
+      type:String,
+      enum:installmentType
+    }
+    ,
     amount: {
       type: String,
       required: true,

@@ -12,3 +12,5 @@ export const InstallmentSearchableFields = [
     'year',
 
   ];
+
+  export const installmentType = ['monthly', 'one time'];
