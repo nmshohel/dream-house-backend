@@ -64,6 +64,11 @@
             "date": 1700312857875,
             "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-18-11-19-success.log",
             "hash": "81956a5599e4ddd833383a2a375f57392601d64e2bfe389e2082edca6c829439"
+        },
+        {
+            "date": 1700660345140,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\successes\\phu-2023-22-11-19-success.log",
+            "hash": "22e7eccabc6d89cbec2799bb85db7484fb76735f6b65408ac35cbd235463d5cd"
         }
     ],
     "hashType": "sha256"
