@@ -114,6 +114,11 @@
             "date": 1701104412227,
             "name": "D:\\projects\\dream-house-backend\\logs\\winston\\errors\\phu-2023-27-11-23-error.log",
             "hash": "611c694880d4e325efbbf99f56c5d03f4bce38140a3d687a7d680ed97bb6e13d"
+        },
+        {
+            "date": 1701110243113,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\errors\\phu-2023-28-11-00-error.log",
+            "hash": "0232254056ccf4ec4e3dd673ca161f54247e9bb3cfdb8766ceaa276cde838c06"
         }
     ],
     "hashType": "sha256"

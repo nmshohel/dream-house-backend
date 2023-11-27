@@ -9,62 +9,59 @@ import { User } from "../user/user.model";
 import { InstallmentSearchableFields } from "./installment.constrant";
 import { IInstallment, IInstallmentFilters } from "./installment.interface";
 import { Installment } from "./installment.model";
+const MAX_INSTALLMENT_AMOUNT = 3000;
 
 const createInstallment = async (data: IInstallment): Promise<any> => {
-  
-const isUserExist=await User.findOne({userName:data.userName})
-if(!isUserExist)
-{
-  throw new ApiError(httpStatus.NOT_FOUND, "User Not Found")
-}
+  const isUserExist = await User.findOne({ userName: data.userName });
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
+  }
 
-// check one time Installment 
-if(data.installmentType==="one time")
-{
-  const createdOTInstallment = await Installment.create({
-    userName: data.userName,
-    installmentType:data.installmentType,
-    amount: data.amount, // Ensure the installment amount is at most 3000
-    status:"pending"
-  });
+  // check one-time Installment
+  if (data.installmentType === "one time") {
+    const createdOTInstallment = await Installment.create({
+      userName: data.userName,
+      installmentType: data.installmentType,
+      amount: data.amount, // Ensure the installment amount is at most MAX_INSTALLMENT_AMOUNT
+      status: "pending"
+    });
 
-  return createdOTInstallment
+    return createdOTInstallment;
+  }
 
-}
-
-  let createdAmount=0;
+  let createdAmount = 0;
   try {
-    const lastInstallment = await Installment.findOne({userName:data?.userName,installmentType:"monthly"}).sort({ createdAt: -1 });
-    let amount:number = parseInt(data?.amount);
-   
+    const lastInstallment = await Installment.findOne({
+      userName: data?.userName,
+      installmentType: "monthly"
+    }).sort({ createdAt: -1 });
+    let amount: number = parseInt(data?.amount);
+
     let nextMonth;
     let nextYear;
 
     if (lastInstallment) {
-      // Convert the month to a number
       const lastMonth: number = parseInt(lastInstallment.month!, 10);
       const lastYear: number = parseInt(lastInstallment.year!, 10);
 
-      // Increment the month and handle the case where it goes beyond 12
       nextMonth = (lastMonth % 12) + 1;
       nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
 
-      // Check if the last installment amount is less than 3000
-      if (Number(lastInstallment.amount) < 3000) {
-        // Fill up the remaining amount for the last month
-        const remainingForLastMonth = 3000 - Number(lastInstallment.amount);
+      if (Number(lastInstallment.amount) < MAX_INSTALLMENT_AMOUNT) {
+        const remainingForLastMonth =
+          MAX_INSTALLMENT_AMOUNT - Number(lastInstallment.amount);
         await Installment.updateOne(
           { _id: lastInstallment._id },
-          { $set: { amount: 3000 } }
+          { $set: { amount: MAX_INSTALLMENT_AMOUNT } }
         );
 
         amount -= remainingForLastMonth;
-        createdAmount=createdAmount+remainingForLastMonth
+        createdAmount = createdAmount + remainingForLastMonth;
       }
     } else {
-      // If there's no previous installment, set default values
-      nextMonth = 1;
-      nextYear = new Date().getFullYear();
+      // If there's no previous installment, set default values to October 2018
+      nextMonth = 10;
+      nextYear = 2018;
     }
 
     while (amount > 0) {
@@ -72,36 +69,243 @@ if(data.installmentType==="one time")
         month: nextMonth,
         year: nextYear,
         userName: data.userName,
-        installmentType:data.installmentType,
-        amount: Math.min(amount, 3000), // Ensure the installment amount is at most 3000
-        status:"pending"
+        installmentType: data.installmentType,
+        amount: Math.min(amount, MAX_INSTALLMENT_AMOUNT),
+        status: "pending"
       });
 
       if (!createdInstallment) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create Installment!");
+        throw new ApiError(
+          httpStatus.BAD_REQUEST,
+          "Failed to create Installment!"
+        );
       }
-      // counter valriable
-      createdAmount=createdAmount+parseInt(createdInstallment.amount)
-      amount -= 3000;
+      createdAmount = createdAmount + parseInt(createdInstallment.amount);
+      amount -= MAX_INSTALLMENT_AMOUNT;
 
-      // Update nextMonth and nextYear for the next iteration
       nextMonth += 1;
       if (nextMonth > 12) {
         nextMonth = 1;
         nextYear += 1;
       }
     }
-
   } catch (error) {
-    // Handle the error appropriately (e.g., log it, throw a custom error, etc.)
     console.error("Error creating installment:", error);
-    throw error; // Re-throw the error for the calling code to handle
+    throw error;
   }
 
   return {
-    "message":`Amount ${createdAmount} added for ${data.userName}`
+    message: `Amount ${createdAmount} added for ${data.userName}`
   };
 };
+
+
+
+
+// const MAX_INSTALLMENT_AMOUNT = 3000;
+
+// const createInstallment = async (data: IInstallment): Promise<any> => {
+//   const isUserExist = await User.findOne({ userName: data.userName });
+//   if (!isUserExist) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
+//   }
+
+//   // check one-time Installment
+//   if (data.installmentType === "one time") {
+//     const createdOTInstallment = await Installment.create({
+//       userName: data.userName,
+//       installmentType: data.installmentType,
+//       amount: data.amount, // Ensure the installment amount is at most MAX_INSTALLMENT_AMOUNT
+//       status: "pending"
+//     });
+
+//     return createdOTInstallment;
+//   }
+
+//   let createdAmount = 0;
+//   try {
+//     const lastInstallment = await Installment.findOne({
+//       userName: data?.userName,
+//       installmentType: "monthly"
+//     }).sort({ createdAt: -1 });
+//     let amount: number = parseInt(data?.amount);
+
+//     let nextMonth;
+//     let nextYear;
+
+//     if (lastInstallment) {
+//       // Convert the month to a number
+//       const lastMonth: number = parseInt(lastInstallment.month!, 10);
+//       const lastYear: number = parseInt(lastInstallment.year!, 10);
+
+//       // Increment the month and handle the case where it goes beyond 12
+//       nextMonth = (lastMonth % 12) + 1;
+//       nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
+
+//       // Check if the last installment amount is less than MAX_INSTALLMENT_AMOUNT
+//       if (Number(lastInstallment.amount) < MAX_INSTALLMENT_AMOUNT) {
+//         // Fill up the remaining amount for the last month
+//         const remainingForLastMonth =
+//           MAX_INSTALLMENT_AMOUNT - Number(lastInstallment.amount);
+//         await Installment.updateOne(
+//           { _id: lastInstallment._id },
+//           { $set: { amount: MAX_INSTALLMENT_AMOUNT } }
+//         );
+
+//         amount -= remainingForLastMonth;
+//         createdAmount = createdAmount + remainingForLastMonth;
+//       }
+//     } else {
+//       // If there's no previous installment, set default values
+//       nextMonth = 1;
+//       nextYear = new Date().getFullYear();
+//     }
+
+//     while (amount > 0) {
+//       const createdInstallment = await Installment.create({
+//         month: nextMonth,
+//         year: nextYear,
+//         userName: data.userName,
+//         installmentType: data.installmentType,
+//         amount: Math.min(amount, MAX_INSTALLMENT_AMOUNT), // Ensure the installment amount is at most MAX_INSTALLMENT_AMOUNT
+//         status: "pending"
+//       });
+
+//       if (!createdInstallment) {
+//         throw new ApiError(
+//           httpStatus.BAD_REQUEST,
+//           "Failed to create Installment!"
+//         );
+//       }
+//       // counter variable
+//       createdAmount = createdAmount + parseInt(createdInstallment.amount);
+//       amount -= MAX_INSTALLMENT_AMOUNT;
+
+//       // Update nextMonth and nextYear for the next iteration
+//       nextMonth += 1;
+//       if (nextMonth > 12) {
+//         nextMonth = 1;
+//         nextYear += 1;
+//       }
+//     }
+//   } catch (error) {
+//     // Handle the error appropriately (e.g., log it, throw a custom error, etc.)
+//     console.error("Error creating installment:", error);
+//     throw error; // Re-throw the error for the calling code to handle
+//   }
+
+//   return {
+//     message: `Amount ${createdAmount} added for ${data.userName}`
+//   };
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const createInstallment = async (data: IInstallment): Promise<any> => {
+  
+// const isUserExist=await User.findOne({userName:data.userName})
+// if(!isUserExist)
+// {
+//   throw new ApiError(httpStatus.NOT_FOUND, "User Not Found")
+// }
+
+// // check one time Installment 
+// if(data.installmentType==="one time")
+// {
+//   const createdOTInstallment = await Installment.create({
+//     userName: data.userName,
+//     installmentType:data.installmentType,
+//     amount: data.amount, // Ensure the installment amount is at most 3000
+//     status:"pending"
+//   });
+
+//   return createdOTInstallment
+
+// }
+
+//   let createdAmount=0;
+//   try {
+//     const lastInstallment = await Installment.findOne({userName:data?.userName,installmentType:"monthly"}).sort({ createdAt: -1 });
+//     let amount:number = parseInt(data?.amount);
+   
+//     let nextMonth;
+//     let nextYear;
+
+//     if (lastInstallment) {
+//       // Convert the month to a number
+//       const lastMonth: number = parseInt(lastInstallment.month!, 10);
+//       const lastYear: number = parseInt(lastInstallment.year!, 10);
+
+//       // Increment the month and handle the case where it goes beyond 12
+//       nextMonth = (lastMonth % 12) + 1;
+//       nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
+
+//       // Check if the last installment amount is less than 3000
+//       if (Number(lastInstallment.amount) < 3000) {
+//         // Fill up the remaining amount for the last month
+//         const remainingForLastMonth = 3000 - Number(lastInstallment.amount);
+//         await Installment.updateOne(
+//           { _id: lastInstallment._id },
+//           { $set: { amount: 3000 } }
+//         );
+
+//         amount -= remainingForLastMonth;
+//         createdAmount=createdAmount+remainingForLastMonth
+//       }
+//     } else {
+//       // If there's no previous installment, set default values
+//       nextMonth = 1;
+//       nextYear = new Date().getFullYear();
+//     }
+
+//     while (amount > 0) {
+//       const createdInstallment = await Installment.create({
+//         month: nextMonth,
+//         year: nextYear,
+//         userName: data.userName,
+//         installmentType:data.installmentType,
+//         amount: Math.min(amount, 3000), // Ensure the installment amount is at most 3000
+//         status:"pending"
+//       });
+
+//       if (!createdInstallment) {
+//         throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create Installment!");
+//       }
+//       // counter valriable
+//       createdAmount=createdAmount+parseInt(createdInstallment.amount)
+//       amount -= 3000;
+
+//       // Update nextMonth and nextYear for the next iteration
+//       nextMonth += 1;
+//       if (nextMonth > 12) {
+//         nextMonth = 1;
+//         nextYear += 1;
+//       }
+//     }
+
+//   } catch (error) {
+//     // Handle the error appropriately (e.g., log it, throw a custom error, etc.)
+//     console.error("Error creating installment:", error);
+//     throw error; // Re-throw the error for the calling code to handle
+//   }
+
+//   return {
+//     "message":`Amount ${createdAmount} added for ${data.userName}`
+//   };
+// };
 
 
 const getAllFromDB = async (
