@@ -1,5 +1,6 @@
 import express from 'express';
 import { InstallmentRoutes } from '../modules/installment/installment.route';
+import { InterestRoutes } from '../modules/interest/interest.route';
 import { UserRoutes } from '../modules/user/user.route';
 
 
@@ -16,6 +17,10 @@ const moduleRoutes = [
   {
     path: '/installments',
     route: InstallmentRoutes,
+  },
+  {
+    path: '/interest',
+    route: InterestRoutes,
   },
 ];
 

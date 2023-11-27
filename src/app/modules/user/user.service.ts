@@ -62,7 +62,9 @@ const getAllFromDB = async (
       andConditions.length > 0 ? { $and: andConditions } : {};
   
     const result = await User.find(whereConditions)
-      .sort(sortConditions)
+      .sort({
+        userName: 1
+      })
       .skip(skip)
       .limit(limit);
   
