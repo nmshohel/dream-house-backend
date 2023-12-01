@@ -2,21 +2,19 @@ import { z } from 'zod';
 
 const create = z.object({
   body: z.object({
+    penantyDate: z.string({
+        required_error:"penanty Date Name is required"
+    }),
     userName: z.string({
-        required_error:"User Name is required"
+        required_error:"user Name is required"
     }),
     amount: z.string({
         required_error:"amount is required"
     }),
-    installmentType: z.string({
-        required_error:"installment Type is required"
-    }),
-
-
   }),
 });
 
 
-export const InstallmentValidation = {
+export const PenantyValidation = {
     create,
 };

@@ -9,9 +9,12 @@ import { User } from "../user/user.model";
 import { InstallmentSearchableFields } from "./installment.constrant";
 import { IInstallment, IInstallmentFilters } from "./installment.interface";
 import { Installment } from "./installment.model";
-const MAX_INSTALLMENT_AMOUNT = 3000;
+
+
 
 const createInstallment = async (data: IInstallment): Promise<any> => {
+  // eslint-disable-next-line prefer-const
+  let MAX_INSTALLMENT_AMOUNT = 2000;
   const isUserExist = await User.findOne({ userName: data.userName });
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
@@ -44,9 +47,10 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
       const lastMonth: number = parseInt(lastInstallment.month!, 10);
       const lastYear: number = parseInt(lastInstallment.year!, 10);
 
+
+
       nextMonth = (lastMonth % 12) + 1;
       nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
-
       if (Number(lastInstallment.amount) < MAX_INSTALLMENT_AMOUNT) {
         const remainingForLastMonth =
           MAX_INSTALLMENT_AMOUNT - Number(lastInstallment.amount);
@@ -98,6 +102,8 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
     message: `Amount ${createdAmount} added for ${data.userName}`
   };
 };
+
+
 
 
 
@@ -524,7 +530,10 @@ return {
       .skip(skip)
       .limit(limit);
   
-    const total = await Installment.countDocuments(whereConditions);
+    const total = await Installment.countDocuments({
+      ...whereConditions,
+      userName: userName,
+    });
   
     return {
       meta: {

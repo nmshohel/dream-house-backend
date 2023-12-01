@@ -1,30 +1,21 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
-import { installmentType, status } from './installment.constrant';
-import { IInstallment, InstallmentModel } from './installment.interface';
+import { status } from './penanty.constrant';
+import { IPenanty, PenantyModel } from './penanty.interface';
 
-const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
+
+const PenantySchema = new Schema<IPenanty, PenantyModel>(
   {
-    userName: {
-      type: String,
+    penantyDate: {
+      type: Date,
       required: true,
     },
-    month:{
+    userName:{
         type:String,
        
     },
-    year:{
+    amount:{
         type:String,
-      
-    },
-    installmentType:{
-      type:String,
-      enum:installmentType
-    }
-    ,
-    amount: {
-      type: String,
-      required: true,
     },
     status: {
       type: String,
@@ -39,7 +30,7 @@ const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
     },
   }
 );
-export const Installment = model<IInstallment, InstallmentModel>('Installment', InstallmentSchema);
+export const Penanty = model<IPenanty, PenantyModel>('Penanty', PenantySchema);
 // UserSchema.statics.isUserExist = async function (
 //   id: string
 // ): Promise<IUser | null> {
