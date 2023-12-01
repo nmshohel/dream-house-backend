@@ -144,6 +144,21 @@
             "date": 1701413061106,
             "name": "D:\\projects\\dream-house-backend\\logs\\winston\\errors\\phu-2023-01-12-12-error.log",
             "hash": "bfeda190bb69d4eab91f377e44c3c7807dffc76e46012f1b00c1ce01e921d75b"
+        },
+        {
+            "date": 1701414616143,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\errors\\phu-2023-01-12-13-error.log",
+            "hash": "4ac2a387f07e4ff24d3e94a8541962c4f8856bf75ef68021b394dbd152f64a4f"
+        },
+        {
+            "date": 1701419849053,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\errors\\phu-2023-01-12-14-error.log",
+            "hash": "1d69eeb67c1c1f4fd12ef0f14b4871257ca6a705883b3def5b569b09114d8dfa"
+        },
+        {
+            "date": 1701421530738,
+            "name": "D:\\projects\\dream-house-backend\\logs\\winston\\errors\\phu-2023-01-12-15-error.log",
+            "hash": "d0f946884abb9f6b96514b05005cab12e4ac87efabe85d7fe3441dc2dfccd6e6"
         }
     ],
     "hashType": "sha256"

@@ -11,11 +11,10 @@ import { IInstallment, IInstallmentFilters } from "./installment.interface";
 import { Installment } from "./installment.model";
 
 
-
 const createInstallment = async (data: IInstallment): Promise<any> => {
-  // eslint-disable-next-line prefer-const
-  let MAX_INSTALLMENT_AMOUNT = 2000;
+  const MAX_INSTALLMENT_AMOUNT = 2000;
   const isUserExist = await User.findOne({ userName: data.userName });
+
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
   }
@@ -33,13 +32,14 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
   }
 
   let createdAmount = 0;
+
   try {
     const lastInstallment = await Installment.findOne({
       userName: data?.userName,
       installmentType: "monthly"
     }).sort({ createdAt: -1 });
-    let amount: number = parseInt(data?.amount);
 
+    let amount: number = parseInt(data?.amount);
     let nextMonth;
     let nextYear;
 
@@ -47,17 +47,12 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
       const lastMonth: number = parseInt(lastInstallment.month!, 10);
       const lastYear: number = parseInt(lastInstallment.year!, 10);
 
-
-
       nextMonth = (lastMonth % 12) + 1;
       nextYear = lastMonth === 12 ? lastYear + 1 : lastYear;
+
       if (Number(lastInstallment.amount) < MAX_INSTALLMENT_AMOUNT) {
         const remainingForLastMonth =
           MAX_INSTALLMENT_AMOUNT - Number(lastInstallment.amount);
-        await Installment.updateOne(
-          { _id: lastInstallment._id },
-          { $set: { amount: MAX_INSTALLMENT_AMOUNT } }
-        );
 
         amount -= remainingForLastMonth;
         createdAmount = createdAmount + remainingForLastMonth;
@@ -67,11 +62,30 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
       nextMonth = 10;
       nextYear = 2018;
     }
-
+    let n
     while (amount > 0) {
+   
+      const nextMonthString:string=nextMonth.toString()
+      if(nextMonthString.length===1)
+      {
+        n=''
+        n='0'+''+nextMonthString
+        nextMonth=parseInt(n)
+        console.log("nextMonth",nextMonth)
+      }
+      else
+      {
+        n=nextMonth
+      }
+
+     
+      let monthYear=''
+      monthYear=n.toString()+'-'+nextYear.toString()
+      console.log("monthYear",monthYear)
       const createdInstallment = await Installment.create({
-        month: nextMonth,
+        month: n,
         year: nextYear,
+        monthYear:monthYear,
         userName: data.userName,
         installmentType: data.installmentType,
         amount: Math.min(amount, MAX_INSTALLMENT_AMOUNT),
@@ -84,6 +98,7 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
           "Failed to create Installment!"
         );
       }
+
       createdAmount = createdAmount + parseInt(createdInstallment.amount);
       amount -= MAX_INSTALLMENT_AMOUNT;
 
@@ -92,7 +107,7 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
         nextMonth = 1;
         nextYear += 1;
       }
-    }
+    }//while end
   } catch (error) {
     console.error("Error creating installment:", error);
     throw error;
@@ -102,6 +117,7 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
     message: `Amount ${createdAmount} added for ${data.userName}`
   };
 };
+
 
 
 
@@ -315,19 +331,22 @@ const createInstallment = async (data: IInstallment): Promise<any> => {
 
 
 const getAllFromDB = async (
-    filters: IInstallmentFilters,
-    paginationOptions: IPaginationOptions
-  ): Promise<any>=> {
+  filters: IInstallmentFilters,
+  paginationOptions: IPaginationOptions
+): Promise<any> => {
+  try {
+    console.log('Starting getAllFromDB function...');
+
     // Extract searchTerm to implement search query
     const { searchTerm, ...filtersData } = filters;
     const { page, limit, skip, sortBy, sortOrder } =
       paginationHelpers.calculatePagination(paginationOptions);
-  
+
     const andConditions = [];
     // Search needs $or for searching in specified fields
     if (searchTerm) {
       andConditions.push({
-        $or: InstallmentSearchableFields.map(field => ({
+        $or: InstallmentSearchableFields.map((field) => ({
           [field]: {
             $regex: searchTerm,
             $options: 'i',
@@ -335,7 +354,7 @@ const getAllFromDB = async (
         })),
       });
     }
-    // Filters needs $and to fullfill all the conditions
+    // Filters need $and to fulfill all the conditions
     if (Object.keys(filtersData).length) {
       andConditions.push({
         $and: Object.entries(filtersData).map(([field, value]) => ({
@@ -343,30 +362,36 @@ const getAllFromDB = async (
         })),
       });
     }
-  
-    // Dynamic  Sort needs  field to  do sorting
-    const sortConditions: { [key: string]: SortOrder } = {createdAt: 1,};
+
+    // Dynamic Sort needs field to do sorting
+    const sortConditions: { [key: string]: SortOrder } = { createdAt: 1 };
     if (sortBy && sortOrder) {
       sortConditions[sortBy] = sortOrder;
     }
     const whereConditions =
       andConditions.length > 0 ? { $and: andConditions } : {};
-  
+
     const result = await Installment.find({
       ...whereConditions,
-      installmentType:"monthly"
+      installmentType: 'monthly',
     })
       .sort(sortConditions)
       .skip(skip)
       .limit(limit);
-  
+
     const total = await Installment.countDocuments(whereConditions);
 
-
-
-
-
-
+    if (result.length === 0) {
+      console.log('No data found.');
+      return {
+        meta: {
+          page,
+          limit,
+          total,
+        },
+        data: {},
+      };
+    }
 
     const formattedResult: { [sheetName: string]: IInstallment[] } = {};
     result.forEach((installment) => {
@@ -374,55 +399,56 @@ const getAllFromDB = async (
       if (!formattedResult[monthYear]) {
         formattedResult[monthYear] = [];
       }
-    
+
       // Create an IInstallment object for each user
       const userInstallment: IInstallment = {
         userName: installment.userName,
         month: installment.month,
         year: installment.year,
+        monthYear:installment.monthYear,
         installmentType: installment.installmentType,
         amount: installment.amount,
         status: installment.status,
       };
-    
+
       formattedResult[monthYear].push(userInstallment);
     });
 
+    // Sort the keys in the formattedResult object
+    const sortedKeys = Object.keys(formattedResult).sort((a, b) => {
+      const [monthA, yearA] = a.split('/').map(Number);
+      const [monthB, yearB] = b.split('/').map(Number);
 
-   
+      if (yearA !== yearB) {
+        return yearA - yearB;
+      } else {
+        return monthA - monthB;
+      }
+    });
 
+    // Create a new object with sorted keys
+    const sortedResult: { [sheetName: string]: IInstallment[] } = {};
+    sortedKeys.forEach((key) => {
+      sortedResult[key] = formattedResult[key];
+    });
 
+    console.log('End of getAllFromDB function.');
 
-
-
-
-// Sort the keys in the formattedResult object
-const sortedKeys = Object.keys(formattedResult).sort((a, b) => {
-  const [monthA, yearA] = a.split('/').map(Number);
-  const [monthB, yearB] = b.split('/').map(Number);
-
-  if (yearA !== yearB) {
-    return yearA - yearB;
-  } else {
-    return monthA - monthB;
+    return {
+      meta: {
+        page,
+        limit,
+        total,
+      },
+      data: sortedResult,
+    };
+  } catch (error) {
+    console.error('An error occurred:', error);
+    // Handle the error appropriately or rethrow it
+    throw error;
   }
-});
-
-// Create a new object with sorted keys
-const sortedResult: { [sheetName: string]: IInstallment[] } = {};
-sortedKeys.forEach((key) => {
-  sortedResult[key] = formattedResult[key];
-});
-
-return {
-  meta: {
-    page,
-    limit,
-    total,
-  },
-  data: sortedResult,
 };
-  };
+
 
   const getAllFromDBByStatusPending = async (
     filters: IInstallmentFilters,

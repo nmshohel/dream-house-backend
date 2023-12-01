@@ -13,10 +13,16 @@ const InstallmentSchema = new Schema<IInstallment, InstallmentModel>(
         type:String,
        
     },
+
     year:{
         type:String,
       
     },
+    monthYear:{
+      type:String,
+      required:true
+     
+  },
     installmentType:{
       type:String,
       enum:installmentType
